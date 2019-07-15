@@ -70,8 +70,46 @@ CloudFormation do
   IAM_Role(:SpotFleetRole) {
     AssumeRolePolicyDocument service_role_assume_policy('spotfleet')
     Path '/'
-    ManagedPolicyArns([
-      'arn:aws:iam::aws:policy/aws-service-role/AWSEC2SpotFleetServiceRolePolicy'
+    Policies([
+        {
+          Effect: 'Allow',
+          Action: [
+            "ec2:DescribeImages",
+            "ec2:DescribeSubnets",
+            "ec2:RequestSpotInstances",
+            "ec2:DescribeInstanceStatus",
+            "ec2:RunInstances"
+          ],
+          Resource: "*"
+        },
+        {
+          Effect: "Allow",
+          Action: "iam:PassRole",
+          Resource: "*",
+          Condition: {
+            StringEquals: {
+              "iam:PassedToService": ["ec2.amazonaws.com"]
+            }
+          }
+        },
+        {
+            Effect: "Allow",
+            Action: "ec2:CreateTags",
+            Resource: [
+                "arn:aws:ec2:*:*:instance/*",
+                "arn:aws:ec2:*:*:spot-instances-request/*"
+            ]
+        },
+        {
+            Effect: "Allow",
+            Action: "ec2:TerminateInstances",
+            Resource: "*",
+            Condition: {
+              StringLike: { 
+                "ec2:ResourceTag/aws:ec2spot:fleet-request-id": "*"
+              }
+            }
+        }
     ])
   }
   
