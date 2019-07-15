@@ -88,7 +88,7 @@ CloudFormation do
                 Resource: "*"
               },
               {
-                Sid: 'iam-pass-role',
+                Sid: 'iamPassRole',
                 Effect: "Allow",
                 Action: "iam:PassRole",
                 Resource: "*",
@@ -99,7 +99,7 @@ CloudFormation do
                 }
               },
               {
-                Sid: 'ec2-create-tags',
+                Sid: 'ec2CreateTags',
                 Effect: "Allow",
                 Action: "ec2:CreateTags",
                 Resource: [
@@ -108,7 +108,7 @@ CloudFormation do
                 ]
               },
               {
-                Sid: 'ec2-terminate-spot-instances',
+                Sid: 'ec2TerminateSpotInstances',
                 Effect: "Allow",
                 Action: "ec2:TerminateInstances",
                 Resource: "*",
