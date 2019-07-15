@@ -1,0 +1,30 @@
+maximum_availability_zones: 5
+
+overrides:
+  - type: t2.small
+
+enable_efs: false
+
+detailed_monitoring: false
+
+iam_policies:
+  ec2-describe:
+    action:
+      - ec2:DescribeInstances
+      - ec2:DescribeTags
+
+userdata: |
+  INSTANCE_ID=$(/opt/aws/bin/ec2-metadata --instance-id|/usr/bin/awk '{print $2}')
+  hostname ${EnvironmentName}-ecs-${!INSTANCE_ID}
+  sed '/HOSTNAME/d' /etc/sysconfig/network > /tmp/network && mv -f /tmp/network /etc/sysconfig/network && echo "HOSTNAME=${EnvironmentName}-ecs-${!INSTANCE_ID}\" >>/etc/sysconfig/network && /etc/init.d/network restart
+
+efs_mount: |
+  mkdir /efs
+  yum install -y nfs-utils
+  mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 ${FileSystem}.efs.${AWS::Region}.amazonaws.com:/ /efs
+
+# cfnsignal: |
+#   /opt/aws/bin/cfn-signal --exit-code $? \
+#            --stack  ${AWS::StackName} \
+#            --resource AutoScaleGroup  \
+#            --region ${AWS::Region}
