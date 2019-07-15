@@ -152,7 +152,7 @@ CloudFormation do
     ],
     ReplaceUnhealthyInstances: false,
     TargetCapacity: Ref(:TargetCapacity),
-    Type: 'request', # instant | maintain 
+    Type: Ref(:Type)
   }
   
   EC2_SpotFleet(:SpotFleet) {

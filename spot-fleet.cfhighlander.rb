@@ -11,6 +11,7 @@ CfhighlanderTemplate do
     ComponentParam 'SubnetIds', type: 'List<AWS::EC2::Subnet::Id>'
     
     ComponentParam 'TargetCapacity', 0
+    ComponentParam 'Type', 'maintain', allowedValues: ['instant', 'maintain', 'request']
   end
 
 
