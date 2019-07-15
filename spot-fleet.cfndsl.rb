@@ -71,45 +71,56 @@ CloudFormation do
     AssumeRolePolicyDocument service_role_assume_policy('spotfleet')
     Path '/'
     Policies([
-        {
-          Effect: 'Allow',
-          Action: [
-            "ec2:DescribeImages",
-            "ec2:DescribeSubnets",
-            "ec2:RequestSpotInstances",
-            "ec2:DescribeInstanceStatus",
-            "ec2:RunInstances"
-          ],
-          Resource: "*"
-        },
-        {
-          Effect: "Allow",
-          Action: "iam:PassRole",
-          Resource: "*",
-          Condition: {
-            StringEquals: {
-              "iam:PassedToService": ["ec2.amazonaws.com"]
-            }
-          }
-        },
-        {
-            Effect: "Allow",
-            Action: "ec2:CreateTags",
-            Resource: [
-                "arn:aws:ec2:*:*:instance/*",
-                "arn:aws:ec2:*:*:spot-instances-request/*"
-            ]
-        },
-        {
-            Effect: "Allow",
-            Action: "ec2:TerminateInstances",
-            Resource: "*",
-            Condition: {
-              StringLike: { 
-                "ec2:ResourceTag/aws:ec2spot:fleet-request-id": "*"
+      {
+        PolicyName: 'spotfleet',
+          PolicyDocument: {
+            Statement: [
+              {
+                Sid: 'ec2',
+                Effect: 'Allow',
+                Action: [
+                  "ec2:DescribeImages",
+                  "ec2:DescribeSubnets",
+                  "ec2:RequestSpotInstances",
+                  "ec2:DescribeInstanceStatus",
+                  "ec2:RunInstances"
+                ],
+                Resource: "*"
+              },
+              {
+                Sid: 'iam-pass-role',
+                Effect: "Allow",
+                Action: "iam:PassRole",
+                Resource: "*",
+                Condition: {
+                  StringEquals: {
+                    "iam:PassedToService": ["ec2.amazonaws.com"]
+                  }
+                }
+              },
+              {
+                Sid: 'ec2-create-tags',
+                Effect: "Allow",
+                Action: "ec2:CreateTags",
+                Resource: [
+                    "arn:aws:ec2:*:*:instance/*",
+                    "arn:aws:ec2:*:*:spot-instances-request/*"
+                ]
+              },
+              {
+                Sid: 'ec2-terminate-spot-instances',
+                Effect: "Allow",
+                Action: "ec2:TerminateInstances",
+                Resource: "*",
+                Condition: {
+                  StringLike: { 
+                    "ec2:ResourceTag/aws:ec2spot:fleet-request-id": "*"
+                  }
+                }
               }
-            }
-        }
+            ]
+          }
+      }
     ])
   }
   
