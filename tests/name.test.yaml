@@ -1,0 +1,6 @@
+test_metadata:
+  type: config
+  name: name
+  description: test the luanch template name config
+
+name: ${EnvironmentName}-my-launch-template
