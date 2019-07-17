@@ -7,6 +7,10 @@ enable_efs: false
 
 detailed_monitoring: false
 
+# setting to true will automatically promote the template  and create a new spot request.
+# false will create a new launch template but not promote it to the spot request
+latest_version: false
+
 iam_policies:
   ec2-describe:
     action:

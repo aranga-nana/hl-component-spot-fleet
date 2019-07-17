@@ -1,0 +1,9 @@
+test_metadata:
+  type: config
+  name: lt_version
+  description: > 
+    use the latest version of the template.
+    this will automatically promote the template 
+    and create a new spot request.
+
+latest_version: true

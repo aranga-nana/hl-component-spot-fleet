@@ -154,16 +154,17 @@ CloudFormation do
     end
   end
   
+  lt_specs = {LaunchTemplateId: Ref(:LaunchTemplate)}
+  lt_specs[:LaunchTemplateName] = FnSub(name) if defined? name
+  lt_specs[:Version] = (latest_version ? FnGetAtt(:LaunchTemplate, :LatestVersionNumber) : FnGetAtt(:LaunchTemplate, :DefaultVersionNumber))
+  
   config_data = {
     AllocationStrategy: 'lowestPrice', # diversified 
     IamFleetRole: FnGetAtt(:SpotFleetRole, :Arn),
     InstanceInterruptionBehavior: 'terminate', # hibernate | stop
     LaunchTemplateConfigs: [
       {
-        LaunchTemplateSpecification: {
-          LaunchTemplateId: Ref(:LaunchTemplate),
-          Version: FnGetAtt(:LaunchTemplate, :DefaultVersionNumber)
-        },
+        LaunchTemplateSpecification: lt_specs,
         Overrides: fleet_overrides
       }
     ],
