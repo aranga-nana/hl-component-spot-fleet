@@ -157,7 +157,7 @@ CloudFormation do
       {
         LaunchTemplateSpecification: {
           LaunchTemplateId: Ref(:LaunchTemplate),
-          Version: FnGetAtt(:LaunchTemplate, :LatestVersionNumber)
+          Version: FnGetAtt(:LaunchTemplate, :DefaultVersionNumber)
         },
         Overrides: fleet_overrides
       }
