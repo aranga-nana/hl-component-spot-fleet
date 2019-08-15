@@ -18,6 +18,8 @@ iam_policies:
       - ec2:DescribeTags
 
 userdata: |
+  #!/bin/bash
+  set -o xtrace
   INSTANCE_ID=$(/opt/aws/bin/ec2-metadata --instance-id|/usr/bin/awk '{print $2}')
   hostname ${EnvironmentName}-ecs-${!INSTANCE_ID}
   sed '/HOSTNAME/d' /etc/sysconfig/network > /tmp/network && mv -f /tmp/network /etc/sysconfig/network && echo "HOSTNAME=${EnvironmentName}-ecs-${!INSTANCE_ID}\" >>/etc/sysconfig/network && /etc/init.d/network restart

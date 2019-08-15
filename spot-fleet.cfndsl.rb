@@ -55,7 +55,7 @@ CloudFormation do
   fleet_tags = fleet_tags.reverse.uniq { |h| h[:Key] }
 
   # Setup userdata string
-  instance_userdata = "#!/bin/bash\nset -o xtrace\n"
+  instance_userdata = ""
   instance_userdata << userdata if defined? userdata
   instance_userdata << efs_mount if enable_efs
   instance_userdata << cfnsignal if defined? cfnsignal
