@@ -4,7 +4,7 @@ CloudFormation do
 
   template_tags = []
   template_tags.push({ Key: 'Name', Value: FnSub("${EnvironmentName}-#{component_name}") })
-  template_tags.push({ Key: 'EnvironmentName', Value: Ref(:EnvironmentName) })
+  template_tags.push({ Key: 'Environment', Value: Ref(:EnvironmentName) })
   template_tags.push({ Key: 'EnvironmentType', Value: Ref(:EnvironmentType) })
   template_tags.push(*tags.map {|k,v| {Key: k, Value: FnSub(v)}}).uniq { |h| h[:Key] } if defined? tags
 
