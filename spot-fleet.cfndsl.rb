@@ -148,7 +148,7 @@ CloudFormation do
       obj[:InstanceType] = ovr['type']
       obj[:MaxPrice] = ovr['price'] if ovr.has_key?('price')
       obj[:Priority] = ovr['priority'] if ovr.has_key?('priority')
-      obj[:SubnetId] = FnSelect(az, Ref('SubnetIds'))
+      obj[:SubnetId] = FnSelect(az, FnSplit(',','SubnetIds'))
       obj[:WeightedCapacity] = ovr['weight'] if ovr.has_key?('weight')
       fleet_overrides << obj
     end
